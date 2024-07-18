@@ -101,3 +101,8 @@ def logar(request):
             return render(request, template_name, context)
 
     return render(request, template_name)
+
+
+def sair(request):
+    logout(request)
+    return redirect(reverse('login'))
