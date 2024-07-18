@@ -8,7 +8,7 @@ def check_username(request):
 
     try:
         user = User.objects.get(username=username.lower())
-        return HttpResponse('Este username já existe !')
+        return HttpResponse('Este usuário já existe !')
     except User.DoesNotExist:
         return HttpResponse('')
 

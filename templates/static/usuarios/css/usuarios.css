@@ -27,6 +27,7 @@ section {
 .box-section {
     display: flex;
     flex-direction: column;
+    width: 50%;
 }
 
 .box-titulo {
