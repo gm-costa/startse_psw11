@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block 'head' %}
+    <link href="{% static 'geral/css/geral.css' %}" rel="stylesheet">
+    <link href="{% static 'usuarios/css/usuarios.css' %}" rel="stylesheet">
+{% endblock 'head' %}
+
+{% block 'body' %}
+
+    <div class="container-fluid">
+        <aside></aside>
+        <section>
+            <div class="box-section">
+                <div class="d-flex align-items-center text-secondary mb-2">
+                    <h3 class="w-40 fs-40 text-uppercase mb-0">start.se</h3>
+                    <div class="w-60">
+                        <hr>
+                    </div>
+                </div>
+                <div class="content">
+                    {% block 'content-form' %}{% endblock 'content-form' %}
+                </div>
+            </div>
+        </section>                
+    </div>
+
+    {% block 'script' %}
+        <script src="{% static 'base/js/htmx.min.js' %}"></script>
+    {% endblock 'script' %}
+
+{% endblock 'body' %}

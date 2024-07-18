@@ -1,0 +1,40 @@
+{% extends './base_usuarios.html' %}
+
+{% load static %}
+
+{% block 'title' %}Cadastro de usuário{% endblock 'title' %}
+
+{% block 'content-form' %}
+    <div class="box-form">
+        <h3>Cadastre-se</h3>
+        {% include "partials/messages.html" %}
+        <form action="{% url 'cadastro' %}" method="POST">
+            {% csrf_token %}
+            <div class="my-3">
+                <label>Username</label>
+                <input type="text" class="form-control" name="username" placeholder="Usuário ..." value="{{username}}" hx-get="{% url 'check_username' %}" hx-trigger="keyup" hx-target="#check-out" required autofocus>
+                <span class="text-danger" id="check-out"></span>
+            </div>
+            <div class="my-3">
+                <label>E-mail</label>
+                <input type="email" class="form-control" name="email" placeholder="email@email.com" value="{{email}}" hx-get="{% url 'check_email' %}" hx-trigger="keyup" hx-target="#check-out-email"  required autofocus>
+                <span class="text-danger" id="check-out-email"></span>
+            </div>
+            <div class="box-senhas">
+                <div class="mb-3">
+                    <label>Senha</label>
+                    <input type="password" class="form-control" name="senha" placeholder="Senha ..."  value="{{senha}}" hx-get="{% url 'check_senha' %}" hx-trigger="focusout" hx-target="#check-senha-out" required>
+                </div>
+                <div class="mb-3">
+                    <label>Confirmar senha</label>
+                    <input type="password" class="form-control" name="confirmar_senha" placeholder="Repita senha ..." value="{{confirmar_senha}}" required>
+                </div>
+            </div>
+            <span class="text-danger" id="check-senha-out"></span>
+            <div class="box-botoes mt-3">
+                <input type="submit" value="Cadastrar" class="btn-cadastro">
+                <a href="{ url 'login' %}" class="btn-secundario">Já possuo uma conta</a>
+            </div>
+        </form>
+    </div>
+{% endblock 'content-form' %}
