@@ -2,7 +2,6 @@
     background-color: var(--main-color);
     min-height: 100vh;
     display: flex;
-    /* justify-content: space-around; */
     justify-content: start;
     font-family: "Inter", sans-serif;
     padding: 0;
@@ -11,9 +10,6 @@
 .container-fluid aside {
     background: url(../img/bg-lateral.png) no-repeat;
     background-size: contain;
-    /* background-position-y: bottom; */
-    /* width: 337px; */
-    /* min-height: 100vh; */
     width: 30%;
 }
 
@@ -27,54 +23,55 @@ section {
 .box-section {
     display: flex;
     flex-direction: column;
-    width: 50%;
+    width: 64%;
 }
 
 .box-titulo {
     display: flex;
     align-items: center;
-    gap: 5;
-    text-align: center;
-    justify-content: center;
-    padding: 0 5rem;
-    margin-bottom: 2rem;
+    color: rgba(255, 255, 255, 0.6);
+    font-weight: 100;
+    justify-content: space-between;
+    margin-bottom: .5rem;
+}
+    
+.box-titulo h3 {
+    font-size: 40px;
+    font-weight: 100;
+    margin-bottom: 0;
+    text-transform: uppercase;
+    width: 30%;
 }
 
-.box-titulo .box-titulo-item:first-child img {
-    width: 5rem;
-} 
-
-.box-titulo-item h3 {
-    text-transform: uppercase;
-    margin-left: 1rem;
-    margin-bottom: 0;
+.box-titulo div {
+    width: 68%;
 }
 
 .box-form > h3 {
-    /* color: var(--main-color); */
-    font-size: 30px;
-    font-weight: 600;
+    font-size: 50px;
+    font-weight: 500;
 }
 
 .btn-cadastro,
 .btn-secundario {
     padding: 13px 24px;
-    border: 1px solid var(--differential-color);
+    border: 1px solid var(--contrast-color);
     border-radius: 6px;
-    font-size: 1rem;
-    font-weight: 600;
+    font-size: 1.5rem;
+    font-weight: 700;
     text-align: center;
     text-decoration: none;
     transition: .3s ease-in-out;
 }
 
 .btn-cadastro {
-    background-color: #4F46E5; /* var(--dark-color); */
+    background-color: var(--contrast-color); 
     color: #fff;
     opacity: .8;
 }
 
 .btn-cadastro:hover{
+    border: 1px solid var(--differential-color);
     opacity: 1;
 }
 
@@ -117,23 +114,20 @@ section {
     width: 45%;
 }
 
-.bg-main {
-    background-color: var(--main-color);
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.box-botoes input{
+    width: 40%;
 }
 
-.bg-main .box-titulo-item {
-    width: 75%;
-    text-align: center;
+@media screen and (max-width: 1300px) {
+    .box-titulo div {
+        width: 60%;
+    }
 }
 
-.bg-main img {
-    background-color: var(--differential-color);
-    border-radius: 50%;
-    padding: 10%;
-    width: 100%;
+@media screen and (max-width: 1024px) {
+    .box-titulo div {
+        width: 50%;
+    }
 }
 
 @media screen and (max-width:980px) {
@@ -154,6 +148,15 @@ section {
         display: block;
     }
     .box-senhas > div {
+        width: 100%;
+    }
+}
+
+@media screen and (max-width:820px) {
+    .box-titulo {
+        display: block;
+    }
+    .box-titulo div {
         width: 100%;
     }
 }

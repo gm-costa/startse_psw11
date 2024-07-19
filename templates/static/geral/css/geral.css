@@ -83,7 +83,7 @@
 }
 
 .bg-color-dark {
-    background-color: var(--main-color);
+    background-color: var(--dark-color);
 }
 
 .color-dark {
@@ -110,6 +110,8 @@ form label {
 .form-select {
     background-color: transparent;
     color: #fff;
+    font-size: 20px;
+    font-weight: 300;
 }
 
 .form-control::placeholder,
@@ -119,13 +121,7 @@ form label {
 
 .form-control:focus,
 .form-select:focus {
-    background-color: transparent; /* var(--main-color); */
-    box-shadow: 1px 1px 1px 1px #4F46E5;
+    background-color: transparent;
+    box-shadow: 1px 1px 1px 1px var(--contrast-color);
     color: #fff;
-}
-
-.img-perfil {
-    width: 6rem;
-    height: 6rem;
-    border-radius: 50%;
 }
