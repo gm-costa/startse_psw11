@@ -1,0 +1,144 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block 'title' %}Cadastro de empresas{% endblock 'title' %}
+
+{% block 'head' %}
+    <link rel="stylesheet" href="{% static 'geral/css/geral.css' %}">
+    <link rel="stylesheet" href="{% static 'geral/css/header.css' %}">
+    <link rel="stylesheet" href="{% static 'usuarios/css/usuarios.css' %}">
+    <link rel="stylesheet" href="{% static 'empresarios/css/empresarios.css' %}">
+{% endblock 'head' %}
+
+{% block 'body' %}
+    <div class="container">
+        <h1 class="mt-3">Cadastro empresa</h1>
+        <hr class="my-0">
+        {% include "partials/messages.html" %}
+        <form action="{% url 'cadastrar_empresa' %}" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="d-flex gap-5">
+                <div class="w-50">
+                    <div class="my-3">
+                        <label>Nome</label>
+                        <input type="text" class="form-control" name="nome" placeholder="Informe o nome da empresa" value="{{nome}}" hx-get="{% url 'check_nome_empresa' %}" hx-trigger="change" hx-target="#check-out-nome" required autofocus>
+                        <span class="text-danger" id="check-out-nome"></span>
+                    </div>
+                    <div class="my-3">
+                        <label>CNPJ</label>
+                        <input type="text" class="form-control" name="cnpj" maxlength="14" placeholder="Informe o CNPJ da empresa" value="{{cnpj}}" hx-get="{% url 'check_cnpj' %}" hx-trigger="change" hx-target="#check-out-cnpj" required>
+                        <span class="text-danger" id="check-out-cnpj"></span>
+                    </div>
+                    <div class="my-3">
+                        <label>Site</label>
+                        <input type="text" class="form-control" name="site" placeholder="Informe o site da empresa" value="{{site}}" required>
+                    </div>
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <label for="">Início de atividade da startup</label><span class="color-secondary" id="check-tempo-out"></span>
+                        </div>
+                        <input type="date" name="inicio_atividade" class="form-control" value="{{inicio_atividade}}" hx-get="{% url 'check_tempo_decorrido' %}" hx-trigger="change" hx-target="#check-tempo-out" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="">Descreva sua empresa</label>
+                        <textarea name="descricao" class="form-control" placeholder="Descreva resumidamente sua empresa" required>{{descricao}}</textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="">Data final para captação</label>
+                        <input type="date" name="data_final_captacao" class="form-control" value="{{data_final_captacao}}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="">Percentual (%) de equity em contrapartida ao valor investido</label>
+                        <input type="number" name="percentual_equity" class="form-control" value="{{percentual_equity}}" placeholder="Informe o percentual de equity oferecido" min="1" max="100" required>
+                    </div>
+                </div>
+                <div class="w-50">
+                    <div class="my-3">
+                        <label class="form-label mb-2">Qual o estágio da empresa ?</label>
+                        <div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="estagio" id="ideia" value="I" 
+                                {% if estagio == 'I' %}
+                                    checked
+                                {% endif %}>
+                                <label class="form-check-label" for="ideia">
+                                    Tenho apenas uma idéia
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="estagio" id="MVP" value="MVP" 
+                                {% if estagio == 'MVP' %}
+                                    checked
+                                {% endif %}>
+                                <label class="form-check-label" for="MVP">
+                                Possuo um MVP
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="estagio" id="MVPP" value="MVPP"
+                                {% if estagio == 'MVPP' %}
+                                    checked
+                                {% endif %}>
+                                <label class="form-check-label" for="MVPP">
+                                Possuo um MVP com clientes pagantes
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="estagio" id="escalar" value="E"
+                                {% if estagio == 'E' %}
+                                    checked
+                                {% endif %}>
+                                <label class="form-check-label" for="escalar">
+                                Empresa pronta para escalar
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="">A startup está inserida em que área ?</label>
+                        <select class="form-select" name="area_atuacao" required>
+                            <option></option>
+                            {% for area in areas_atuacoes %}
+                                <option value="{{area.0}}"
+                                {% if area.0 == area_atuacao %}
+                                    selected
+                                {% endif %}
+                                >{{area.1}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="">Público alvo da startup ?</label>
+                        <select class="form-select" name="publico_alvo" required>
+                            <option></option>
+                            {% for p_alvo in publicos_alvos %}
+                                <option value="{{p_alvo.0}}"
+                                {% if p_alvo.0 == publico_alvo %}
+                                    selected
+                                {% endif %}>{{p_alvo.1}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="">Que valor deseja captar ?</label>
+                        <input type="number" name="valor_captacao" class="form-control" value="{{valor_captacao}}" placeholder="10.000,00" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="">Selecione pitch de apresentação</label>
+                        <input type="file" name="pitch" class="form-control" accept="video/*" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="">Selecione logo da empresa</label>
+                        <input type="file" name="logo" class="form-control" accept="image/*" required>
+                    </div>
+                </div>
+            </div>
+            <input type="submit" class="btn-cadastro w-20 mt-2" value="Cadastrar">
+        </form>
+    </div>
+
+    {% block 'script' %}
+        <script src="{% static 'base/js/htmx.min.js' %}"></script>
+    {% endblock 'script' %}
+
+{% endblock 'body' %}

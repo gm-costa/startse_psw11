@@ -9,8 +9,7 @@ from django.urls import reverse
 def cadastro(request):
     if request.user.is_authenticated:
         messages.add_message(request, messages.WARNING, 'Efetue logout para cadastrar usuário.')
-        return HttpResponse('Efetue logout para cadastrar usuário.')
-        return redirect(reverse('cadastro_empresa'))
+        return redirect(reverse('lista_empresas'))
     
     template_name = 'cadastro.html'
     if request.method == "POST":
@@ -38,7 +37,7 @@ def cadastro(request):
         users = User.objects.filter(username=username)
 
         if users.exists():
-            messages.add_message(request, messages.ERROR, 'Já existe um usuário com este username.')
+            messages.add_message(request, messages.ERROR, 'Já existe um usuário com este nome.')
             return render(request, template_name, context)
 
         users_email = User.objects.filter(email=email)
@@ -74,9 +73,8 @@ def cadastro(request):
 
 def logar(request):
     if request.user.is_authenticated:
-        messages.add_message(request, messages.WARNING, 'Efetue logout para cadastrar usuário.')
-        return HttpResponse('Efetue logout para cadastrar usuário.')
-        return redirect(reverse('cadastro_empresa'))
+        messages.add_message(request, messages.WARNING, 'Efetue logout para logar com outro usuário.')
+        return redirect(reverse('lista_empresas'))
     
     template_name = 'login.html'
     if request.method == 'POST':
@@ -104,8 +102,7 @@ def logar(request):
 
         if user:
             login(request, user)
-            return HttpResponse(f'{user.username} está logado!')
-            return redirect(reverse('cadastro_empresa'))
+            return redirect(reverse('lista_empresas'))
         else:
             messages.add_message(
                 request, messages.ERROR, 'Senha inválida !'

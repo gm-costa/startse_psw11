@@ -94,6 +94,14 @@
     color: var(--main-color);
 }
 
+.color-secondary {
+    color: var(--secondary-color);
+}
+
+.bgc-body {
+    background-color: var(--main-color);
+}
+
 .bi-asterisk {
     color: red;
     font-size: 8px;
@@ -101,22 +109,26 @@
 
 .form-label,
 form label {
-    font-size: 14px;
-    font-weight: 500;
+    font-size: 18px;
+    font-weight: 600;
     margin-bottom: 0;
+}
+
+.form-check-label {
+    font-weight: 300;
 }
 
 .form-control,
 .form-select {
     background-color: transparent;
     color: #fff;
-    font-size: 20px;
+    font-size: 18px;
     font-weight: 300;
 }
 
 .form-control::placeholder,
 .form-select::placeholder {
-    color: #9b9393;
+    color: var(--secondary-color);
 }
 
 .form-control:focus,
@@ -124,4 +136,34 @@ form label {
     background-color: transparent;
     box-shadow: 1px 1px 1px 1px var(--contrast-color);
     color: #fff;
+}
+
+.form-select:invalid {
+    color: var(--secondary-color);
+}
+
+input[type="date"]:invalid,
+input[type="file"]:invalid {
+    color: var(--secondary-color);
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(.5);
+}
+
+input[type="file"]::file-selector-button {
+    background-color: var(--contrast-color);
+    border: transparent;
+    color: #fff;
+    opacity: .8;
+}
+
+input[type="file"]:hover:not(:disabled):not([readonly])::file-selector-button {
+    background-color: var(--contrast-color);
+    opacity: 1;
+}
+
+option {
+    background-color: var(--main-color);
+    color: var(--secondary-color);
 }

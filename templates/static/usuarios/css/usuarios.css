@@ -54,7 +54,7 @@ section {
 
 .btn-cadastro,
 .btn-secundario {
-    padding: 13px 24px;
+    padding: 8px 24px;
     border: 1px solid var(--contrast-color);
     border-radius: 6px;
     font-size: 1.5rem;
@@ -93,13 +93,16 @@ section {
     padding: 10px 10px;
 }
 
-.bsm {
-    padding: 4px 25px;
-    height: 38px;
+.bsm-px10 {
+    padding: 4px 10px;
+    height: 41px;
+    font-size: 22px;
 }
 
-.bsm-6 {
-    padding: 6px 10px;
+.bsm-px20 {
+    padding: 4px 20px;
+    height: 41px;
+    font-size: 22px;
 }
 
 .box-senhas,
