@@ -71,3 +71,13 @@ def cadastrar_empresa(request):
 
     return render(request, template_name, context)
 
+
+@login_required
+def lista_empresas(request):
+    template_name = 'lista_empresas.html'
+    empresas = Empresa.objects.all()
+    busca = request.GET.get('empresa')
+    if busca:
+        empresas = empresas.filter(nome__icontains=busca)
+    context = {'empresas': empresas, 'busca': busca}
+    return render(request, template_name, context)

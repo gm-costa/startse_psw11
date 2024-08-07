@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block 'title' %}Lista de empresas{% endblock 'title' %}
+
+{% block 'head' %}
+    <link rel="stylesheet" href="{% static 'geral/css/geral.css' %}">
+    <link rel="stylesheet" href="{% static 'geral/css/header.css' %}">
+    <link rel="stylesheet" href="{% static 'usuarios/css/usuarios.css' %}">
+    <link rel="stylesheet" href="{% static 'empresarios/css/empresarios.css' %}">
+{% endblock 'head' %}
+
+{% block 'body' %}
+    <div class="container inter">
+        {% include "partials/messages.html" %}
+        <form class="pb-4" action="{% url 'lista_empresas' %}" method="GET">
+            <div class="d-flex align-items-end gap-4 mt-4">
+                <div class="">
+                    <label>Empresa</label>
+                    <input type="text" class="form-control" name="empresa" placeholder="Informe o nome da empresa" 
+                    {% if busca %}
+                        value="{{busca}}"
+                    {% endif %} autofocus>
+                </div>
+                <input type="submit" class="btn-cadastro bsm-px20" value="Filtrar">
+                <a href="{% url 'lista_empresas' %}" class="btn-secundario bsm-px10" data-bs-tt="tooltip" data-bs-title="Remover filtro"><i class="bi bi-arrow-counterclockwise"></i></a>
+            </div>
+        </form>
+        <div class="bg-color-dark p-4">
+            {% if empresas %}
+                <table class="table align-middle my-table">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Nome</th>
+                            <th scope="col">Percentual captado</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Ação</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for empresa in empresas  %}
+                            <tr>
+                                <th scope="row">{{forloop.counter}}</th>
+                                <td>{{empresa.nome}}</td>
+                                <td>{{empresa.percent_equity}}</td>
+                                <td><span>Em captação</span></td>
+                                <td><a href="#" class="btn-cadastro">Abrir</a></td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p class="fs-30 fw-600 text-center">Não existe empresa cadastrada !</p>
+            {% endif %}
+                
+        </div>
+    </div>
+{% endblock 'body' %}
