@@ -13,7 +13,7 @@
 {% block 'body' %}
     <div class="container inter">
         {% include "partials/messages.html" %}
-        <form class="pb-4" action="{% url 'lista_empresas' %}" method="GET">
+        <form action="{% url 'lista_empresas' %}" method="GET">
             <div class="d-flex align-items-end gap-4 mt-4">
                 <div class="">
                     <label>Empresa</label>
@@ -26,9 +26,9 @@
                 <a href="{% url 'lista_empresas' %}" class="btn-secundario bsm-px10" data-bs-tt="tooltip" data-bs-title="Remover filtro"><i class="bi bi-arrow-counterclockwise"></i></a>
             </div>
         </form>
-        <div class="bg-color-dark p-4">
+        <div class="bg-color-dark p-5">
             {% if empresas %}
-                <table class="table align-middle my-table">
+                <table class="table align-middle mb-0">
                     <thead>
                         <tr>
                             <th scope="col">#</th>
@@ -44,14 +44,14 @@
                                 <th scope="row">{{forloop.counter}}</th>
                                 <td>{{empresa.nome}}</td>
                                 <td>{{empresa.percent_equity}}</td>
-                                <td><span>Em captação</span></td>
-                                <td><a href="#" class="btn-cadastro">Abrir</a></td>
+                                <td>{{empresa.status}}</td>
+                                <td><a href="{% url 'ver_empresa' empresa.id %}" class="btn-cadastro">Abrir</a></td>
                             </tr>
                         {% endfor %}
                     </tbody>
                 </table>
             {% else %}
-                <p class="fs-30 fw-600 text-center">Não existe empresa cadastrada !</p>
+                <p class="fs-3 fw-600 text-center">Você não possui empresa cadastrada !</p>
             {% endif %}
                 
         </div>

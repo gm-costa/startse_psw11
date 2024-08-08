@@ -1,65 +1,70 @@
-.container > img {
-    margin-top: 2rem;
-    border-radius: 1rem;
-    width: 10%;
-}
-
 .container > form {
-    padding-bottom: 3rem;
+    padding-bottom: 2rem;
 }
 
-.my-table {
+.table {
     font-size: 18px;
-    margin: 0 auto;
-    margin-bottom: 2rem;
-    width: 80%;
 }
 
-.my-table thead th{
+.table thead th{
     background-color: transparent;
     color: #fff;
 }
 
-.my-table tbody th,
-.my-table tbody td {
+.table tbody th,
+.table tbody td {
     background-color: var(--main-color);
     color: #fff;
     font-weight: 500;
 }
 
-.my-table a {
-    display: inline-block;
-    font-size: 12px;
-    height: 22px;
-    padding: 3px 20px;
-    padding-top: 1px;
-    vertical-align: text-top;
-}
-
-.my-table tbody span {
-    border: 1px solid var(--secondary-color);
-    border-radius: 6px;
-    font-size: 12px;
-    height: 22px;
-    padding: 3px 24px;
-}
-
-.logo {
-    border-radius: .5rem;
-    width: 20%;
-}
-
 .progress {
-    height: 22px;
+    font-size: inherit;
+    height: inherit;
 }
 
 .progress-bar {
-    background-color:#60F29A;
+    background-color: var(--green-color);
     color:#000;
-    font-weight: 600;
 }
 
-.img-radius {
-    border-radius: 1rem;
-    width: 72px;
+.table a {
+    display: inline-block;
+    font-size: inherit;
+    font-weight: inherit;
+    height: 27px;
+    padding: 0 16px;
+}
+
+.badge {
+    font-size: inherit;
+    font-weight: inherit;
+    height: 27px;
+    padding-top: 4px;
+    --bs-badge-padding-x: 16px;
+}
+
+.badge-green {
+    background-color: var(--green-color);
+    color: #000;
+}
+
+.badge-blue {
+    background-color: var(--differential-color);
+}
+
+.logo {
+    border-radius: 20px;
+    width: 144px;
+    height: 144px;
+}
+
+.quadro {
+    display: inline-block;
+    width: 17px;
+    height: 17px;
+}
+
+.investimentos {
+    min-height: 80vh;
 }

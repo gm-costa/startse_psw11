@@ -1,9 +1,9 @@
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 from .models import Empresa
-from brutils import is_valid_cnpj
+from brutils import is_valid_cnpj, format_cnpj
 
 
 @login_required
@@ -75,9 +75,27 @@ def cadastrar_empresa(request):
 @login_required
 def lista_empresas(request):
     template_name = 'lista_empresas.html'
-    empresas = Empresa.objects.all()
+    empresas = Empresa.objects.filter(user=request.user)
     busca = request.GET.get('empresa')
     if busca:
         empresas = empresas.filter(nome__icontains=busca)
     context = {'empresas': empresas, 'busca': busca}
     return render(request, template_name, context)
+
+
+@login_required
+def ver_empresa(request, id):
+    template_name = 'empresa.html'
+    empresa = get_object_or_404(Empresa, id=id)
+    if empresa.user != request.user:
+        messages.add_message(request, messages.ERROR, "Este empresa não lhe pertence !")
+        return redirect(reverse('lista_empresas'))
+    
+
+    context = {
+        'empresa': empresa, 
+        'cnpj': format_cnpj(empresa.cnpj),
+
+    }
+    if request.method == "GET":
+        return render(request, template_name, context)

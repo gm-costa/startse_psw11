@@ -10,20 +10,16 @@
     font-size: 12px;
 }
 
+.fs-14 {
+    font-size: 14px;
+}
+
 .fs-18 {
     font-size: 18px;
 }
 
-.fs-25 {
-    font-size: 25px;
-}
-
-.fs-30 {
-    font-size: 30px;
-}
-
-.fs-40 {
-    font-size: 40px;
+.fs-22 {
+    font-size: 22px;
 }
 
 .fw-500 {
@@ -84,6 +80,10 @@
 
 .bg-color-dark {
     background-color: var(--dark-color);
+}
+
+.bg-color-main {
+    background-color: var(--main-color);
 }
 
 .color-dark {

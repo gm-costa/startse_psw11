@@ -5,6 +5,8 @@ from . import views, htmx_views
 urlpatterns = [
     path('cadastrar-empresa/', views.cadastrar_empresa, name='cadastrar_empresa' ),
     path('lista-empresas/', views.lista_empresas, name='lista_empresas' ),
+    path('ver-empresa/<int:id>', views.ver_empresa, name='ver_empresa'),
+
 ]
 
 htmx_urlpatterns = [
