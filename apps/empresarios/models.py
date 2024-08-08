@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date, datetime
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils.safestring import mark_safe
@@ -35,6 +35,12 @@ class Empresa(models.Model):
     valor = models.DecimalField(max_digits=9, decimal_places=2) # Valor total a ser vendido
     pitch = models.FileField(upload_to='pitchs')
     logo = models.FileField(upload_to='logo')
+
+    @property
+    def tempo_existencia(self):
+        dt_hoje = datetime.today().date()
+        tempo = (dt_hoje - self.inicio_atividade).days//30
+        return tempo # retorna o tempo em meses
 
     @property
     def percent_equity(self):

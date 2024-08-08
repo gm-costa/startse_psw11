@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block 'title' %}Sugestões de investimentos{% endblock 'title' %}
+
+{% block 'head' %}
+    <link rel="stylesheet" href="{% static 'geral/css/geral.css' %}">
+    <link rel="stylesheet" href="{% static 'geral/css/header.css' %}">
+    <link rel="stylesheet" href="{% static 'usuarios/css/usuarios.css' %}">
+    <link rel="stylesheet" href="{% static 'empresarios/css/empresarios.css' %}">
+    <link rel="stylesheet" href="{% static 'investidores/css/investidores.css' %}">
+{% endblock 'head' %}
+
+{% block 'body' %}
+    <div class="container">
+        <div class="w-75 mx-auto my-5">
+            <div class="text-center">
+                <h2 class="fw-700">Receba sugestões de empresas</h2>
+                <p class="fs-22 w-80 mx-auto">Vamos analisar seu perfil de investidor e indicar as melhores opções de investimentos</p>
+            </div>
+            <div class="bg-color-dark mt-5 p-5">
+                {% include 'partials/messages.html' %}
+                <form action="{% url 'sugestoes' %}" method="POST">
+                    {% csrf_token %}
+                    <div class="mb-4">
+                        <h3 class="fw-700">Tipo de investidor</h3>
+                        <p>Selecione conservador caso busque investimentos de menos risco
+                            e com menor retorno, selecione despojado se prefere correr mais riscos
+                            e ter maiores possíbilidades de retorno.</p>
+                        <select name="tipo" class="form-select w-70" autofocus>
+                            <option value="C" {% if tipo == 'C' %}selected{% endif%}>Conservador</option>
+                            <option value="D" {% if tipo == 'D' %}selected{% endif%}>Despojado</option>
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <h3 class="fw-700">Áreas de interesses</h3>
+                        <p>Selecione as áreas de mercado que possui interesse em investir</p>
+                        <select name="area" class="form-select w-70" size="3" multiple>
+                            {% for area in areas %}
+                                <option value="{{area.0}}" {% if area.0 in areas_post %}selected{% endif%}>{{area.1}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <h3 class="fw-700">Valor que deseja investir</h3>
+                        <p>Coloque o valor máximo que deseja investir</p>
+                        <input type="number" name="valor" class="form-control w-70" placeholder="0,00" value="{{valor}}">
+                    </div>
+                    <input type="submit" class="btn-cadastro mt-3" value="Próximo">
+                </form>
+            </div>
+            <div class="d-flex justify-content-between mt-5">
+                {% for empresa in empresas %}
+                    <div class="card">
+                        <img class="card-img-top dark-color" src="{{empresa.logo.url}}" alt="Card image cap">
+                        <div class="card-body text-white">
+                            <h5 class="card-title fs-3 fw-700 mb-1">{{empresa.nome}}</h5>
+                            <p class="card-text fs-18">{{empresa.descricao}}</p>
+                            <a href="#" class="d-block btn-cadastro mt-4">Acessar</a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock 'body' %}
