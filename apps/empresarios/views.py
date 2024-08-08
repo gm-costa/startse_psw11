@@ -2,7 +2,7 @@ from django.shortcuts import redirect, render, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
-from .models import Empresa
+from .models import Documento, Empresa
 from brutils import is_valid_cnpj, format_cnpj
 
 
@@ -91,11 +91,63 @@ def ver_empresa(request, id):
         messages.add_message(request, messages.ERROR, "Este empresa não lhe pertence !")
         return redirect(reverse('lista_empresas'))
     
-
+    documentos = Documento.objects.filter(empresa=empresa)
     context = {
         'empresa': empresa, 
         'cnpj': format_cnpj(empresa.cnpj),
-
+        'documentos': documentos
     }
     if request.method == "GET":
         return render(request, template_name, context)
+
+
+@login_required
+def add_doc(request, id_emp):
+    if get_object_or_404(Empresa, id=id_emp).user != request.user:
+        messages.add_message(request, messages.ERROR, "Este empresa não lhe pertence !")
+        return redirect(reverse('lista_empresas'))
+    
+    titulo = request.POST.get('titulo')
+    arquivo = request.FILES.get('arquivo')
+
+    if len(titulo.strip()) == 0:
+        messages.add_message(request, messages.ERROR, "Título não informado !")
+        return redirect(f'/empresarios/ver-empresa/{id_emp}')
+
+    if not arquivo:
+        messages.add_message(request, messages.ERROR, "Arquivo não escolhido !")
+        return redirect(f'/empresarios/ver-empresa/{id_emp}')
+    
+    extensao = arquivo.name.split('.')
+    if extensao[1].lower() != 'pdf':
+        messages.add_message(request, messages.ERROR, "Envie apenas PDF's")
+        return redirect(f'/empresarios/ver-empresa/{id_emp}')
+    
+    try:
+        documento = Documento(
+            empresa_id=id_emp,
+            titulo=titulo,
+            arquivo=arquivo
+        )
+        documento.save()
+        messages.add_message(request, messages.SUCCESS, "Arquivo cadastrado com sucesso")
+    except Exception as e:
+        messages.add_message(request, messages.ERROR, f"Ocorreu um erro: {e}.")
+    
+    return redirect(f'/empresarios/ver-empresa/{id_emp}')
+
+
+@login_required
+def excluir_doc(request, id):
+    documento = get_object_or_404(Documento, id=id)
+    if documento.empresa.user != request.user:
+        messages.add_message(request, messages.ERROR, 'Esse documento não faz parte de uma empresa que lhe pertence !')
+        return redirect(reverse('lista_empresas'))
+    
+    try:
+        documento.delete()
+        messages.add_message(request, messages.SUCCESS, 'Documento excluído com sucesso')
+    except Exception as e:
+        messages.add_message(request, messages.ERROR, f'Ocorreu erro: {e}')
+
+    return redirect(f'/empresarios/ver-empresa/{documento.empresa.id}')
