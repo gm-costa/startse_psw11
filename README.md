@@ -29,6 +29,12 @@
    <br>
 - Lista empresas <br>
   ![Lista empresas](screenshots/lista_empresas.jpg)
+  <br>
+- Ver empresa <br>
+  ![Lista empresas](screenshots/ver_empresa.jpg)
+  <br>
+- Sugestões de empresas para investidores <br>
+  ![Lista empresas](screenshots/sugestoes.jpg)
   
 ### Como executar o projeto
 
