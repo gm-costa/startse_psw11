@@ -66,3 +66,12 @@ class Documento(models.Model):
 
     def __str__(self):
         return self.titulo
+
+
+class Metrica(models.Model):
+    empresa = models.ForeignKey(Empresa, on_delete=models.DO_NOTHING)
+    titulo = models.CharField(max_length=40)
+    valor = models.DecimalField(max_digits=9, decimal_places=2)
+
+    def __str__(self):
+        return self.titulo

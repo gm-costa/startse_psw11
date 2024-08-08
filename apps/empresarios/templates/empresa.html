@@ -91,7 +91,7 @@
                 </div>
                 <hr>
                 <label class="fs-3 fw-700 mb-2">Métricas</label>
-                <form action="#" method="POST">
+                <form action="{% url 'add_metrica' empresa.id %}" method="POST">
                     {% csrf_token %}
                     <div class="d-flex align-items-end justify-content-between gap-4">
                         <div>

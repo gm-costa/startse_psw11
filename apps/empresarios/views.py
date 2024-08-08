@@ -2,7 +2,7 @@ from django.shortcuts import redirect, render, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
-from .models import Documento, Empresa
+from .models import Documento, Empresa, Metrica
 from brutils import is_valid_cnpj, format_cnpj
 
 
@@ -104,18 +104,18 @@ def ver_empresa(request, id):
 @login_required
 def add_doc(request, id_emp):
     if get_object_or_404(Empresa, id=id_emp).user != request.user:
-        messages.add_message(request, messages.ERROR, "Este empresa não lhe pertence !")
+        messages.add_message(request, messages.ERROR, 'Você não pode adicionar documento a uma empresa não lhe pertence !')
         return redirect(reverse('lista_empresas'))
     
     titulo = request.POST.get('titulo')
     arquivo = request.FILES.get('arquivo')
 
     if len(titulo.strip()) == 0:
-        messages.add_message(request, messages.ERROR, "Título não informado !")
+        messages.add_message(request, messages.ERROR, 'Título não informado !')
         return redirect(f'/empresarios/ver-empresa/{id_emp}')
 
     if not arquivo:
-        messages.add_message(request, messages.ERROR, "Arquivo não escolhido !")
+        messages.add_message(request, messages.ERROR, 'Arquivo não escolhido !')
         return redirect(f'/empresarios/ver-empresa/{id_emp}')
     
     extensao = arquivo.name.split('.')
@@ -130,9 +130,9 @@ def add_doc(request, id_emp):
             arquivo=arquivo
         )
         documento.save()
-        messages.add_message(request, messages.SUCCESS, "Arquivo cadastrado com sucesso")
+        messages.add_message(request, messages.SUCCESS, 'Arquivo cadastrado com sucesso')
     except Exception as e:
-        messages.add_message(request, messages.ERROR, f"Ocorreu um erro: {e}.")
+        messages.add_message(request, messages.ERROR, f'Ocorreu um erro: {e}.')
     
     return redirect(f'/empresarios/ver-empresa/{id_emp}')
 
@@ -151,3 +151,31 @@ def excluir_doc(request, id):
         messages.add_message(request, messages.ERROR, f'Ocorreu erro: {e}')
 
     return redirect(f'/empresarios/ver-empresa/{documento.empresa.id}')
+
+
+@login_required
+def add_metrica(request, id_emp):
+    empresa = get_object_or_404(Empresa, id=id_emp)
+    if empresa.user != request.user:
+        messages.add_message(request, messages.ERROR, 'Você não pode adicionar métrica a uma empresa não lhe pertence !')
+        return redirect(reverse('lista_empresas'))
+
+    titulo = request.POST.get('metrica')
+    valor = request.POST.get('valor')
+
+    if len(titulo.strip()) == 0 or len(valor.strip()) == 0:
+        messages.add_message(request, messages.WARNING, 'Informe título e valor da métrica !')
+        return redirect(f'/empresarios/ver-empresa/{id_emp}')
+    
+    try:
+        metrica = Metrica(
+            empresa_id=id_emp,
+            titulo=titulo.strip(),
+            valor=valor
+        )
+        metrica.save()
+        messages.add_message(request, messages.SUCCESS, 'Métrica adicionada com sucesso.')
+    except Exception as e:
+        messages.add_message(request, messages.ERROR, f'Erro: {e}')
+
+    return redirect(f'/empresarios/ver-empresa/{id_emp}')

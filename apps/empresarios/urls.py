@@ -8,6 +8,7 @@ urlpatterns = [
     path('ver-empresa/<int:id>', views.ver_empresa, name='ver_empresa'),
     path('add-doc/<int:id_emp>', views.add_doc, name='add_doc'),
     path('excluir-doc/<int:id>', views.excluir_doc, name='excluir_doc'),
+    path('add-metrica/<int:id_emp>', views.add_metrica, name='add_metrica'),
 ]
 
 htmx_urlpatterns = [

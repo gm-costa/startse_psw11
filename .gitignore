@@ -165,3 +165,4 @@ media/
 # Archives
 reset_senha.py
 generate_secret_key.py
+gerar_cnpj.py
