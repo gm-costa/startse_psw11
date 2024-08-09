@@ -5,7 +5,7 @@ from empresarios.models import Empresa
 
 class PropostaInvestimento(models.Model):
     status_choices = (
-        ('AS', 'Aguardando assinatura'),
+        ('AA', 'Aguardando assinatura'),
         ('PE', 'Proposta enviada'),
         ('PA', 'Proposta aceita'),
         ('PR', 'Proposta recusada')
@@ -14,7 +14,7 @@ class PropostaInvestimento(models.Model):
     percentual = models.FloatField()
     empresa = models.ForeignKey(Empresa, on_delete=models.DO_NOTHING)
     investidor = models.ForeignKey(User, on_delete=models.DO_NOTHING)
-    status = models.CharField(max_length=2, choices=status_choices, default='AS')
+    status = models.CharField(max_length=2, choices=status_choices, default='AA')
     selfie = models.FileField(upload_to="selfie", null=True, blank=True)
     rg = models.FileField(upload_to="rg", null=True, blank=True)
 

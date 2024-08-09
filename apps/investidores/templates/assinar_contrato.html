@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block 'title' %}Investimento empresa{% endblock 'title' %}
+
+{% block 'head' %}
+    <link rel="stylesheet" href="{% static 'geral/css/geral.css' %}">
+    <link rel="stylesheet" href="{% static 'geral/css/header.css' %}">
+    <link rel="stylesheet" href="{% static 'usuarios/css/usuarios.css' %}">
+    <link rel="stylesheet" href="{% static 'empresarios/css/empresarios.css' %}">
+    <link rel="stylesheet" href="{% static 'investidores/css/investidores.css' %}">
+{% endblock 'head' %}
+
+
+{% block 'body' %}
+    <div class="container">
+        <div class="row align-items-center mt-5">
+            <div class="col-md-3">
+                <img src="{{pi.empresa.logo.url}}" class="logo" alt="Logo da empresa">
+            </div>
+            <div class="col-md">
+                <h3>Assinar contrato</h3>
+            </div>
+        </div>    
+        <div class="mt-3">
+            {% include 'partials/messages.html' %}
+        </div>
+        <div class="contrato mt-5">
+            <h3>Contrato de investimento</h3>
+            <p>Ao assinar esse contrato você concorda com todas as cláusulas abaixo</p>
+            
+            <ol>
+                <li>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy</li>
+                <li>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy</li>
+                <li>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy</li>
+            </ol>
+        </div>
+        <form action="{% url 'assinar_contrato' pi.id %}" enctype='multipart/form-data' method="POST">
+            {% csrf_token %}
+            <div class="w-70 mt-5">
+                <div class="mb-3">
+                    <label for="selfie">Selfie</label>
+                    <input type="file" name="selfie" class="form-control">
+                </div>
+                <div class="mb-3">
+                    <label for="rg">RG</label>
+                    <input type="file" name="rg" class="form-control">
+                </div>
+                <br>
+                <mb class="mb-3">
+                    <input type="submit" class="btn-cadastro bsm-px20 w-40" value="Assinar">
+                </mb>
+            </div>
+        </form>
+    </div>
+{% endblock 'body' %}

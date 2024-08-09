@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.http import Http404
 from django.shortcuts import redirect, render, get_object_or_404
 from empresarios.models import Documento, Empresa
 from .models import PropostaInvestimento
@@ -105,3 +106,35 @@ def realizar_proposta(request, id_emp):
 
         #messages.add_message(request, messages.SUCCESS, f'Proposta enviada com sucesso')
         return redirect(f'/investidores/assinar_contrato/{pi.id}')
+
+
+@login_required
+def assinar_contrato(request, id_pi):
+    template_name = 'assinar_contrato.html'
+    pi = get_object_or_404(PropostaInvestimento, id=id_pi)
+    if pi.status != "AA":
+        raise Http404()
+    
+    if request.method == "POST":
+        selfie = request.FILES.get('selfie')
+        rg = request.FILES.get('rg')
+
+        if not selfie or not rg:
+            messages.add_message(request, messages.WARNING, 'Selfie e/ou RG não informados !')
+            return redirect(f'/investidores/assinar_contrato/{id_pi}')
+
+        try:
+            pi.selfie = selfie
+            pi.rg = rg
+            pi.status = 'PE'
+            pi.save()
+        except Exception as e:
+            messages.add_message(request, messages.WARNING, 'Não foi possível assinar o contrato.')
+            messages.add_message(request, messages.ERROR, f'Erro: {e}')
+            return redirect(f'/investidores/assinar_contrato/{id_pi}')
+
+        messages.add_message(request, messages.SUCCESS, f'Contrato assinado com sucesso, sua proposta foi enviada à empresa.')
+        return redirect(f'/investidores/acessar_empresa/{pi.empresa.id}')
+
+    else:
+        return render(request, template_name, {'pi': pi})
