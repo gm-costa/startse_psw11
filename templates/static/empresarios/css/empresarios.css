@@ -59,6 +59,12 @@
     height: 144px;
 }
 
+.logo-sm {
+    border-radius: 20px;
+    width: 70px;
+    height: 70px;
+}
+
 .quadro {
     display: inline-block;
     width: 17px;

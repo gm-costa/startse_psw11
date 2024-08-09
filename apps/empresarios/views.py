@@ -2,6 +2,7 @@ from django.shortcuts import redirect, render, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
+from investidores.models import PropostaInvestimento
 from .models import Documento, Empresa, Metrica
 from brutils import is_valid_cnpj, format_cnpj
 
@@ -92,10 +93,13 @@ def ver_empresa(request, id):
         return redirect(reverse('lista_empresas'))
     
     documentos = Documento.objects.filter(empresa=empresa)
+    proposta_investimentos = PropostaInvestimento.objects.filter(empresa=empresa)
+    proposta_investimentos_enviada = proposta_investimentos.filter(status='PE')
     context = {
         'empresa': empresa, 
         'cnpj': format_cnpj(empresa.cnpj),
-        'documentos': documentos
+        'documentos': documentos,
+        'proposta_investimentos_enviada': proposta_investimentos_enviada,
     }
     if request.method == "GET":
         return render(request, template_name, context)
