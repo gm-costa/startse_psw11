@@ -1,8 +1,9 @@
 from datetime import datetime, timedelta
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import redirect, render, get_object_or_404
 from empresarios.models import Documento, Empresa
+from .models import PropostaInvestimento
 
 
 @login_required
@@ -62,3 +63,45 @@ def acessar_empresa(request, id_emp):
         pass
     else:
         return render(request, template_name, context)
+
+
+@login_required
+def realizar_proposta(request, id_emp):
+    if request.method == 'POST':
+        empresa = get_object_or_404(Empresa, id=id_emp)
+        valor = request.POST.get('valor').strip()
+        percentual = request.POST.get('percentual').strip()
+
+        if len(valor) == 0 or len(percentual) == 0:
+            messages.add_message(request, messages.WARNING, 'Valor e/ou Percentual não informados !')
+            return redirect(f'/investidores/acessar_empresa/{id_emp}')
+
+        propostas_aceitas = PropostaInvestimento.objects.filter(empresa=empresa).filter(status='PA')
+        total = 0
+        for pa in propostas_aceitas:
+            total = total + pa.percentual
+
+        if total + int(percentual)  > empresa.percentual_equity:
+            messages.add_message(request, messages.WARNING, 'O percentual solicitado ultrapassa o percentual máximo.')
+            return redirect(f'/investidores/acessar_empresa/{id_emp}')
+
+        valuation = (100 * int(valor)) / int(percentual)
+
+        if valuation < (int(empresa.valuation) / 2):
+            messages.add_message(request, messages.WARNING, f'Seu valuation proposto foi R$ {valuation} e deve ser no mínimo R$ {empresa.valuation/2}')
+            return redirect(f'/investidores/acessar_empresa/{id_emp}')
+
+        try:
+            pi = PropostaInvestimento(
+                valor = valor,
+                percentual = percentual,
+                empresa = empresa,
+                investidor = request.user,
+            )
+            pi.save()
+        except Exception as e:
+            messages.add_message(request, messages.WARNING, f'Erro: {e}')
+            return redirect(f'/investidores/acessar_empresa/{id_emp}')
+
+        #messages.add_message(request, messages.SUCCESS, f'Proposta enviada com sucesso')
+        return redirect(f'/investidores/assinar_contrato/{pi.id}')
