@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block 'title' %}Investimento empresa{% endblock 'title' %}
+
+{% block 'head' %}
+    <link rel="stylesheet" href="{% static 'geral/css/geral.css' %}">
+    <link rel="stylesheet" href="{% static 'geral/css/header.css' %}">
+    <link rel="stylesheet" href="{% static 'usuarios/css/usuarios.css' %}">
+    <link rel="stylesheet" href="{% static 'empresarios/css/empresarios.css' %}">
+    <link rel="stylesheet" href="{% static 'investidores/css/investidores.css' %}">
+{% endblock 'head' %}
+
+{% block 'body' %}
+    <div class="container">
+        <div class="d-flex gap-5 my-5">
+            {% include 'partials/messages.html' %}
+            <div class="w-50">
+                <div class="row gap-4 mb-4">
+                    <div class="col-md-3">
+                        <img src="{{empresa.logo.url}}" class="logo" alt="Logo empresa">
+                    </div>
+                    <div class="col-md">
+                        <h3>{{empresa.nome}}</h3>
+                        <span class="badge bg-primary">{{empresa.get_area_display}}</span>
+                    </div>
+                </div>
+                <div class="w-70 mb-3">
+                    {{empresa.percent_equity}}
+                </div>
+                <span class="badge bg-info"><i class="bi bi-check-lg fs-18"></i></span><span>&nbsp &nbsp A empresa já atingiu {{empresa.percentual_equity}}% do percentual captado, portanto seu investimento será concretizado.</span>
+
+                <!--  <span class="badge bg-warning">x</span><span>&nbsp &nbsp Seu investimento será concretizado caso a empresa atinja pelo meno 80% do valor esperado até a data final.</span>-->
+                
+                <hr>
+                <p>{{empresa.descricao}}</p>
+                <div class="col-md">
+                    <h5>Valuation esperado</h5>
+                    <span class="sub-fonte">Esperado: &nbsp;{{empresa.valuation|floatformat:"2g"}}</span>
+                    <br>
+                    <br>
+                    <h5>Percentual</h5>
+                    <span class="sub-fonte">Total a venda: &nbsp;{{empresa.percentual_equity}}%</span>
+                    <br>
+                    <span class="sub-fonte">Disponivel à compra: %</span>
+                </div>
+                <br>
+                <span class="badge bg-warning">{{empresa.publico_alvo}}</span>
+                <br><br>
+                <h4 style="color: #92D5EB">Indicadores |</h4>
+                
+                <div class="row">
+                    <!-- #TODO: Listar as métricas dinamicamente -->
+                    <div class="col-md-3 bg-color-dark" >
+                        <div class="dark-color" style="padding: 20px; text-align: center;">
+                            <h5>CAC</h5>
+                            <h6>R$ 200</h6>
+                        </div>
+                    </div>
+                    <div class="col-md-3" >
+                        <div class="bg-color-dark" style="padding: 20px; text-align: center;">
+                            <h5>CAC</h5>
+                            <h6>R$ 200</h6>
+                        </div>
+                    </div>
+                </div>
+
+                <hr>
+                <h4>Faça sua proposta</h4>
+                <form action="" method="POST"> 
+                    {% csrf_token %}
+                    <div class="d-flex gap-4 mt-4">
+                        <input type="number" name="valor" class="form-control" placeholder="Valor para investir">
+                        <input type="number" name="percentual" class="form-control" placeholder="Percentual desejado">
+                        <input type="submit" class="btn-cadastro bsm-px20" value="Salvar">
+                    </div>
+                </form>
+                    
+            </div>
+            <div class="w-50 intereses-investimentos">
+                <video name='demo' controls autoplay width='100%'>
+                    <source src="{{empresa.pitch.url}}" type="video/mp4"></source>
+                </video>
+
+                <hr>
+                <h3>Documentos</h3>
+                <div class="list_documentos">
+                    {% for doc in documentos %}
+                    <div class="row bg-color-dark py-2 mx-0 mb-2">
+                        <div class="col-md-1" style="text-align: center">
+                            <a href="{{doc.arquivo.url}}" target="_blank">
+                                <i class="bi bi-download"></i>
+                            </a>
+                        </div>
+                        <div class="col-md-10">{{doc.titulo}}</div>
+                        <div class="col-md-1" style="text-align: right;">
+                            <a href="{% url 'excluir_doc' doc.id %}">
+                                <i class="bi bi-x-lg"></i>
+                            </a>
+                        </div>
+                    </div>
+                    {% empty %}
+                        <p class="bg-color-dark color-secondary p-2">Não existe documento anexado !</p>
+                    {% endfor %}
+                </div>
+                
+            </div>
+        </div>
+    </div>
+{% endblock 'body' %}

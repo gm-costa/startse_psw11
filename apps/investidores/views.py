@@ -1,9 +1,11 @@
 from datetime import datetime, timedelta
 from django.contrib import messages
-from django.shortcuts import render
-from empresarios.models import Empresa
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, get_object_or_404
+from empresarios.models import Documento, Empresa
 
 
+@login_required
 def sugestoes(request):
     template_name = 'sugestoes.html'
     areas = Empresa.area_choices
@@ -21,6 +23,7 @@ def sugestoes(request):
             messages.add_message(request, messages.WARNING, 'Área e/ou valor não informados !')
             return render(request, template_name, context)
 
+        # TODO: Criar um tipo genérico (M - Mediano)
         if tipo == 'C':
             empresas = Empresa.objects.filter(inicio_atividade__lte=datetime.today().date() - timedelta(days=1825)).filter(estagio="E")
         elif tipo == 'D':
@@ -42,5 +45,20 @@ def sugestoes(request):
 
         return render(request, template_name, context)
 
+    else:
+        return render(request, template_name, context)
+
+
+@login_required
+def acessar_empresa(request, id_emp):
+    template_name = 'acessar_empresa.html'
+    empresa = get_object_or_404(Empresa, id=id_emp)
+    documentos = Documento.objects.filter(empresa=empresa)
+    context = {
+        'empresa': empresa,
+        'documentos': documentos,
+    }
+    if request.method == 'POST':
+        pass
     else:
         return render(request, template_name, context)
