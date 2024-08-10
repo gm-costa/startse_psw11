@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block 'title' %}Lista propostas de investimentos{% endblock 'title' %}
+
+{% block 'head' %}
+    <link rel="stylesheet" href="{% static 'geral/css/geral.css' %}">
+    <link rel="stylesheet" href="{% static 'geral/css/header.css' %}">
+    <link rel="stylesheet" href="{% static 'usuarios/css/usuarios.css' %}">
+    <link rel="stylesheet" href="{% static 'empresarios/css/empresarios.css' %}">
+{% endblock 'head' %}
+
+{% block 'body' %}
+    <div class="container inter">
+        {% include "partials/messages.html" %}
+        <form action="{% url 'lista_empresas' %}" method="GET">
+            <div class="d-flex align-items-end gap-4 mt-4">
+                <div class="">
+                    <label>Empresa</label>
+                    <input type="text" class="form-control" name="empresa" placeholder="Informe o nome da empresa" 
+                    {% if busca %}
+                        value="{{busca}}"
+                    {% endif %} autofocus>
+                </div>
+                <input type="submit" class="btn-cadastro bsm-px20" value="Filtrar">
+                <a href="{% url 'lista_empresas' %}" class="btn-secundario bsm-px10" data-bs-tt="tooltip" data-bs-title="Remover filtro"><i class="bi bi-arrow-counterclockwise"></i></a>
+            </div>
+        </form>
+        <div class="bg-color-dark p-5">
+            {% if propostas %}
+                <table class="table align-middle mb-0">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Empresa</th>
+                            <th scope="col">Percentual captado</th>
+                            <th scope="col">Status</th>
+                            <th scope="col" class="text-center">Ação</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for proposta in propostas  %}
+                            <tr>
+                                <th scope="row">{{forloop.counter}}</th>
+                                <td>{{proposta.empresa.nome}}</td>
+                                <td>
+                                    <div class="progress" role="progressbar" aria-valuenow="{{proposta.percentual}}" aria-valuemin="0" aria-valuemax="100">
+                                        <div class="progress-bar" style="width: {{proposta.percentual}}%">{{proposta.percentual|floatformat:'1g'}}</div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="badge border">{{proposta.get_status_display}}</span>
+                                </td>
+                                <td class="text-center">
+                                    {% if proposta.concretizada %}
+                                        <i class="bi bi-check-lg bg-info">
+                                    {% else %}
+                                        <i class="bi bi-x-lg bg-warning"></i>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p class="fs-3 fw-600 text-center mb-0">Que pena, ainda não há empresa investidora !</p>
+            {% endif %}
+                
+        </div>
+    </div>
+{% endblock 'body' %}

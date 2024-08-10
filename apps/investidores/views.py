@@ -155,3 +155,15 @@ def assinar_contrato(request, id_pi):
 
     else:
         return render(request, template_name, {'pi': pi})
+
+
+@login_required
+def lista_propostas(request):
+    template_name = 'lista_propostas.html'
+    propostas = PropostaInvestimento.objects.filter(investidor=request.user)
+    context = {
+        'propostas' : propostas,
+        'concretizado': True
+    }
+
+    return render(request, template_name, context)

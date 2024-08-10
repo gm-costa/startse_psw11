@@ -21,6 +21,10 @@ class PropostaInvestimento(models.Model):
     @property
     def valuation(self):
         return float((100*self.valor)) / self.percentual
+    
+    @property
+    def concretizada(self):
+        return True if self.percentual >= (self.empresa.percentual_equity * .8) else False
 
     def __str__(self):
         return str(self.valor)
