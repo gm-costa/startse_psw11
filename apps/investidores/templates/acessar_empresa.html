@@ -25,12 +25,15 @@
                         <span class="badge bg-primary">{{empresa.get_area_display}}</span>
                     </div>
                 </div>
-                <div class="w-70 mb-3">
-                    {{empresa.percent_equity}}
+                <div class="progress w-70 mb-3">
+                    <div class="progress-bar">{{percentual_vendido}}%</div>
                 </div>
-                <span><i class="bi bi-check-lg bg-info"></i>&nbsp A empresa já atingiu x% do percentual captado, portanto seu investimento será concretizado.</span>
-
-                <!--  <span class="badge bg-warning">x</span><span>&nbsp &nbsp Seu investimento será concretizado caso a empresa atinja pelo meno 80% do valor esperado até a data final.</span>-->
+                
+                {% if concretizado %}
+                    <span><i class="bi bi-check-lg bg-info"></i>&nbsp; A empresa já atingiu x% do percentual captado, portanto seu investimento será concretizado.</span>
+                {% else %}
+                    <span><i class="bi bi-x-lg bg-warning"></i>&nbsp; Seu investimento será concretizado caso a empresa atinja pelo meno 80% do valor esperado até a data final.</span>
+                {% endif %}
                 
                 <hr>
                 <p class="text-justify">{{empresa.descricao}}</p>
@@ -42,7 +45,7 @@
                     <h5>Percentual</h5>
                     <span class="sub-fonte">Total a venda: &nbsp;{{empresa.percentual_equity}}%</span>
                     <br>
-                    <span class="sub-fonte">Disponivel à compra: %</span>
+                    <span class="sub-fonte">Disponivel à compra: {{percentual_disponivel}}%</span>
                 </div>
                 <br>
                 <span class="badge bg-warning">{{empresa.publico_alvo}}</span>

@@ -95,11 +95,26 @@ def ver_empresa(request, id):
     documentos = Documento.objects.filter(empresa=empresa)
     proposta_investimentos = PropostaInvestimento.objects.filter(empresa=empresa)
     proposta_investimentos_enviada = proposta_investimentos.filter(status='PE')
+
+    percentual_vendido = 0
+    for pi in proposta_investimentos:
+        if pi.status == 'PA':
+            percentual_vendido += pi.percentual
+
+    qtd_investidores = proposta_investimentos.filter(status='PA').count()
+    total_captado = sum(proposta_investimentos.filter(status='PA').values_list('valor', flat=True))
+
+    valuation_atual = (100 * float(total_captado)) / float(percentual_vendido) if percentual_vendido != 0 else 0
+
     context = {
         'empresa': empresa, 
         'cnpj': format_cnpj(empresa.cnpj),
         'documentos': documentos,
         'proposta_investimentos_enviada': proposta_investimentos_enviada,
+        'percentual_vendido': percentual_vendido,
+        'qtd_investidores': qtd_investidores,
+        'total_captado': total_captado,
+        'valuation_atual': valuation_atual,
     }
     if request.method == "GET":
         return render(request, template_name, context)
@@ -183,3 +198,23 @@ def add_metrica(request, id_emp):
         messages.add_message(request, messages.ERROR, f'Erro: {e}')
 
     return redirect(f'/empresarios/ver-empresa/{id_emp}')
+
+
+@login_required
+def gerenciar_proposta(request, id_pi):
+    acao = request.GET.get('acao')
+    pi = PropostaInvestimento.objects.get(id=id_pi)
+
+    if acao == 'aceitar':
+        pi.status = 'PA'
+        messages.add_message(request, messages.SUCCESS, 'Proposta aceita.')
+    elif acao == 'recusar':
+        pi.status = 'PR'
+        messages.add_message(request, messages.INFO, 'Proposta recusada !')
+
+    try:
+        pi.save()
+    except Exception as e:
+        messages.add_message(request, messages.ERROR, f'Erro: {e}')
+
+    return redirect(f'/empresarios/ver-empresa/{pi.empresa.id}')

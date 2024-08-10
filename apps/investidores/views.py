@@ -55,9 +55,20 @@ def sugestoes(request):
 def acessar_empresa(request, id_emp):
     template_name = 'acessar_empresa.html'
     empresa = get_object_or_404(Empresa, id=id_emp)
+    proposta_investimentos = PropostaInvestimento.objects.filter(empresa=empresa)
+    percentual_vendido = sum(proposta_investimentos.filter(status='PA').values_list('percentual', flat=True))
+    limiar = (80 * empresa.percentual_equity) / 100
+    concretizado = False
+    if percentual_vendido >= limiar:
+        concretizado = True
+    percentual_disponivel = empresa.percentual_equity - percentual_vendido
+
     documentos = Documento.objects.filter(empresa=empresa)
     context = {
         'empresa': empresa,
+        'percentual_vendido': percentual_vendido,
+        'concretizado': concretizado,
+        'percentual_disponivel': percentual_disponivel,
         'documentos': documentos,
     }
     if request.method == 'POST':
@@ -75,7 +86,7 @@ def realizar_proposta(request, id_emp):
 
         if len(valor) == 0 or len(percentual) == 0:
             messages.add_message(request, messages.WARNING, 'Valor e/ou Percentual não informados !')
-            return redirect(f'/investidores/acessar_empresa/{id_emp}')
+            return redirect(f'/investidores/acessar-empresa/{id_emp}')
 
         propostas_aceitas = PropostaInvestimento.objects.filter(empresa=empresa).filter(status='PA')
         total = 0
@@ -84,13 +95,13 @@ def realizar_proposta(request, id_emp):
 
         if total + int(percentual)  > empresa.percentual_equity:
             messages.add_message(request, messages.WARNING, 'O percentual solicitado ultrapassa o percentual máximo.')
-            return redirect(f'/investidores/acessar_empresa/{id_emp}')
+            return redirect(f'/investidores/acessar-empresa/{id_emp}')
 
         valuation = (100 * int(valor)) / int(percentual)
 
         if valuation < (int(empresa.valuation) / 2):
             messages.add_message(request, messages.WARNING, f'Seu valuation proposto foi R$ {valuation} e deve ser no mínimo R$ {empresa.valuation/2}')
-            return redirect(f'/investidores/acessar_empresa/{id_emp}')
+            return redirect(f'/investidores/acessar-empresa/{id_emp}')
 
         try:
             pi = PropostaInvestimento(
@@ -102,10 +113,10 @@ def realizar_proposta(request, id_emp):
             pi.save()
         except Exception as e:
             messages.add_message(request, messages.WARNING, f'Erro: {e}')
-            return redirect(f'/investidores/acessar_empresa/{id_emp}')
+            return redirect(f'/investidores/acessar-empresa/{id_emp}')
 
         #messages.add_message(request, messages.SUCCESS, f'Proposta enviada com sucesso')
-        return redirect(f'/investidores/assinar_contrato/{pi.id}')
+        return redirect(f'/investidores/assinar-contrato/{pi.id}')
 
 
 @login_required
@@ -121,7 +132,7 @@ def assinar_contrato(request, id_pi):
 
         if not selfie or not rg:
             messages.add_message(request, messages.WARNING, 'Selfie e/ou RG não informados !')
-            return redirect(f'/investidores/assinar_contrato/{id_pi}')
+            return redirect(f'/investidores/assinar-contrato/{id_pi}')
 
         try:
             pi.selfie = selfie
@@ -131,10 +142,10 @@ def assinar_contrato(request, id_pi):
         except Exception as e:
             messages.add_message(request, messages.WARNING, 'Não foi possível assinar o contrato.')
             messages.add_message(request, messages.ERROR, f'Erro: {e}')
-            return redirect(f'/investidores/assinar_contrato/{id_pi}')
+            return redirect(f'/investidores/assinar-contrato/{id_pi}')
 
         messages.add_message(request, messages.SUCCESS, f'Contrato assinado com sucesso, sua proposta foi enviada à empresa.')
-        return redirect(f'/investidores/acessar_empresa/{pi.empresa.id}')
+        return redirect(f'/investidores/acessar-empresa/{pi.empresa.id}')
 
     else:
         return render(request, template_name, {'pi': pi})
