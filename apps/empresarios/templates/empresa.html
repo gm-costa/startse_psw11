@@ -23,7 +23,9 @@
                         <h2 class="fs-3">{{empresa.nome}}</h2>
                         <p class="fs-14">CNPJ: &nbsp;{{cnpj}}</p>
                         <label class="fs-22 fw-700">Percentual captado</label>
-                        {{empresa.percent_equity}}
+                        <div class="progress" role="progressbar" aria-valuenow="{{empresa.percentual_equity}}" aria-valuemin="0" aria-valuemax="100">
+                            <div class="progress-bar" style="width: {{empresa.percentual_equity}}%">{{empresa.percentual_equity|floatformat:'1g'}}</div>
+                        </div>
                     </div>
                 </div>
                 <div class="d-flex justify-content-between fs-3 fw-700">
@@ -37,16 +39,16 @@
                         <label class="fs-22">Percentual de equity vendido</label>
                         <div class="progress-stacked" style="height: 27px;">
                             <div class="progress" role="progressbar" aria-valuenow="{{percentual_vendido}}" aria-valuemin="0" aria-valuemax="100" style="height: 27px;width: {{percentual_vendido}}%">
-                                <div class="progress-bar">{{percentual_vendido}}%</div>
+                                <div class="progress-bar">{{percentual_vendido|floatformat:'1g'}}</div>
                             </div>
                             <div class="progress" role="progressbar" aria-valuenow="{{empresa.percentual_equity}}" aria-valuemin="0" aria-valuemax="100" style="height: 27px;width: {{empresa.percentual_equity}}%">
-                                <div class="progress-bar" style="background-color:#60ACF2">{{empresa.percentual_equity}}%</div>
+                                <div class="progress-bar bg-blue">{{empresa.percentual_equity|floatformat:'1g'}}</div>
                             </div>
                         </div>
                         <div class="my-3">
                             <p class="d-flex align-items-center fs-14 mb-2"><label class="quadro bg-white me-2"></label><span>Percentual total da empresa</span></p>
-                            <p class="d-flex align-items-center fs-14 mb-2"><label class="quadro bg-info me-2"></label><span>Percentual máximo a ser vendido</span></p>
-                            <p class="d-flex align-items-center fs-14 mb-2"><label class="quadro bg-success me-2"></label><span>Percentual vendido</span></p>
+                            <p class="d-flex align-items-center fs-14 mb-2"><label class="quadro bg-blue me-2"></label><span>Percentual máximo a ser vendido</span></p>
+                            <p class="d-flex align-items-center fs-14 mb-2"><label class="quadro bg-green me-2"></label><span>Percentual vendido</span></p>
                         </div>
                     </div>
                     <div class="w-40 d-flex flex-column">

@@ -41,12 +41,6 @@ class Empresa(models.Model):
         dt_hoje = datetime.today().date()
         tempo = (dt_hoje - self.inicio_atividade).days//30
         return tempo # retorna o tempo em meses
-
-    @property
-    def percent_equity(self):
-        html = f'<div class="progress" role="progressbar" aria-valuenow="{self.percentual_equity}" aria-valuemin="0" aria-valuemax="100">'
-        html += f'<div class="progress-bar" style="width: {self.percentual_equity}%">{self.percentual_equity}%</div></div>'
-        return mark_safe(html)
     
     @property
     def status(self):

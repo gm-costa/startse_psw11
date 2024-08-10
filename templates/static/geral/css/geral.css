@@ -86,6 +86,14 @@
     background-color: var(--main-color);
 }
 
+.bg-blue {
+    background-color: var(--differential-color) !important;
+}
+
+.bg-green {
+    background-color: var(--green-color);
+}
+
 .color-dark {
     color: var(--dark-color);
 }

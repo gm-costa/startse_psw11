@@ -43,7 +43,11 @@
                             <tr>
                                 <th scope="row">{{forloop.counter}}</th>
                                 <td>{{empresa.nome}}</td>
-                                <td>{{empresa.percent_equity}}</td>
+                                <td>
+                                    <div class="progress" role="progressbar" aria-valuenow="{{empresa.percentual_equity}}" aria-valuemin="0" aria-valuemax="100">
+                                        <div class="progress-bar" style="width: {{empresa.percentual_equity}}%">{{empresa.percentual_equity|floatformat:'1g'}}</div>
+                                    </div>
+                                </td>
                                 <td>{{empresa.status}}</td>
                                 <td><a href="{% url 'ver_empresa' empresa.id %}" class="btn-cadastro">Abrir</a></td>
                             </tr>

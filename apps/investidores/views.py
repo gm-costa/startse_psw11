@@ -3,8 +3,9 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import Http404
 from django.shortcuts import redirect, render, get_object_or_404
-from empresarios.models import Documento, Empresa
+from empresarios.models import Documento, Empresa, Metrica
 from .models import PropostaInvestimento
+from brutils import format_cnpj
 
 
 @login_required
@@ -64,12 +65,16 @@ def acessar_empresa(request, id_emp):
         concretizado = True
     percentual_disponivel = empresa.percentual_equity - percentual_vendido
 
+    metricas = Metrica.objects.filter(empresa=empresa)
     documentos = Documento.objects.filter(empresa=empresa)
+
     context = {
         'empresa': empresa,
-        'percentual_vendido': percentual_vendido,
+        'cnpj_formatado': format_cnpj(empresa.cnpj),
+        'percentual_vendido': int(percentual_vendido),
         'concretizado': concretizado,
         'percentual_disponivel': percentual_disponivel,
+        'metricas': metricas,
         'documentos': documentos,
     }
     if request.method == 'POST':

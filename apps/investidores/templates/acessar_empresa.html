@@ -16,23 +16,29 @@
         <div class="mt-4">{% include 'partials/messages.html' %}</div>
         <div class="d-flex gap-5 my-5">
             <div class="w-50">
-                <div class="row gap-4 mb-4">
-                    <div class="col-md-3">
-                        <img src="{{empresa.logo.url}}" class="logo" alt="Logo empresa">
-                    </div>
-                    <div class="col-md">
+                <div class="d-flex gap-4 mb-4">
+                    <img src="{{empresa.logo.url}}" class="logo" alt="Logo empresa">
+                    <div class="d-flex flex-column">
                         <h3>{{empresa.nome}}</h3>
-                        <span class="badge bg-primary">{{empresa.get_area_display}}</span>
+                        <p class="fs-14 mb-4">CNPJ: &nbsp;{{cnpj_formatado}}</p>
+                        <span class="badge bg-primary w-60">{{empresa.get_area_display}}</span>
                     </div>
                 </div>
                 <div class="progress w-70 mb-3">
-                    <div class="progress-bar">{{percentual_vendido}}%</div>
+                    <div class="progress-stacked" style="height: 27px;width: 100%;">
+                        <div class="progress" role="progressbar" aria-valuenow="{{percentual_vendido}}" aria-valuemin="0" aria-valuemax="100" style="height: 27px;width: {{percentual_vendido}}%">
+                            <div class="progress-bar">{{percentual_vendido|floatformat:'1g'}}</div>
+                        </div>
+                        <div class="progress" role="progressbar" aria-valuenow="{{empresa.percentual_equity}}" aria-valuemin="0" aria-valuemax="100" style="height: 27px;width: {{empresa.percentual_equity}}%">
+                            <div class="progress-bar bg-blue">{{empresa.percentual_equity|floatformat:'1g'}}</div>
+                        </div>
+                    </div>
                 </div>
                 
                 {% if concretizado %}
-                    <span><i class="bi bi-check-lg bg-info"></i>&nbsp; A empresa já atingiu x% do percentual captado, portanto seu investimento será concretizado.</span>
+                    <span><i class="bi bi-check-lg bg-info"></i>&nbsp; A empresa já atingiu {{percentual_vendido|floatformat:'1g'}}% do percentual captado, portanto seu investimento será concretizado.</span>
                 {% else %}
-                    <span><i class="bi bi-x-lg bg-warning"></i>&nbsp; Seu investimento será concretizado caso a empresa atinja pelo meno 80% do valor esperado até a data final.</span>
+                    <span><i class="bi bi-x-lg bg-warning"></i>&nbsp; Seu investimento será concretizado caso a empresa atinja pelo menos 80% do valor esperado até a data final.</span>
                 {% endif %}
                 
                 <hr>
@@ -50,22 +56,16 @@
                 <br>
                 <span class="badge bg-warning">{{empresa.publico_alvo}}</span>
                 <br><br>
-                <h4 style="color: #92D5EB">Indicadores |</h4>
-                
-                <div class="row">
-                    <!-- #TODO: Listar as métricas dinamicamente -->
-                    <div class="col-md-3 bg-color-dark" >
-                        <div class="dark-color" style="padding: 20px; text-align: center;">
-                            <h5>CAC</h5>
-                            <h6>R$ 200</h6>
+                <h4 style="color: #92D5EB">Indicadores |</h4>     
+                <div class="d-flex flex-wrap column-gap-5 row-gap-4 my-4">
+                    {% for metrica in metricas %}
+                        <div class="w-40 bg-color-dark text-center fw-700 p-4">
+                            <p class="fs-18">{{metrica.titulo}}</p>
+                            <p class="fs-4 mb-0">R$ {{metrica.valor}}</p>
                         </div>
-                    </div>
-                    <div class="col-md-3" >
-                        <div class="bg-color-dark" style="padding: 20px; text-align: center;">
-                            <h5>CAC</h5>
-                            <h6>R$ 200</h6>
-                        </div>
-                    </div>
+                    {% empty %}
+                        <p class="bg-color-dark fs-18 p-3 mb-0">Nenhuma métrica cadastrada !</p>
+                    {% endfor %}
                 </div>
 
                 <hr>
