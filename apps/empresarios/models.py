@@ -58,7 +58,8 @@ class Empresa(models.Model):
     
     @property
     def valuation(self):
-        return int(((100 * self.valor) / self.percentual_equity)*100)/100
+        valor = (100 * self.valor) / self.percentual_equity
+        return int(valor*100)/100
 
 
     def __str__(self):

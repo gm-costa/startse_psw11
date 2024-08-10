@@ -25,11 +25,12 @@ def sugestoes(request):
             messages.add_message(request, messages.WARNING, 'Área e/ou valor não informados !')
             return render(request, template_name, context)
 
-        # TODO: Criar um tipo genérico (M - Mediano)
         if tipo == 'C':
-            empresas = Empresa.objects.filter(inicio_atividade__lte=datetime.today().date() - timedelta(days=1825)).filter(estagio="E")
+            empresas = Empresa.objects.filter(inicio_atividade__lte=datetime.today().date() - timedelta(days=1825)).filter(estagio="E") # Mais de 5 anos
         elif tipo == 'D':
-            empresas = Empresa.objects.filter(inicio_atividade__gt=datetime.today().date() - timedelta(days=1825)).exclude(estagio="E")
+            empresas = Empresa.objects.filter(inicio_atividade__gt=datetime.today().date() - timedelta(days=730)).exclude(estagio="E") # Até 2 anos
+        elif tipo == 'M':
+            empresas = Empresa.objects.filter(inicio_atividade__gt=datetime.today().date() - timedelta(days=1825)).filter(inicio_atividade__lt=datetime.today().date() - timedelta(days=730)).exclude(estagio="E") # De 2 a 5 anos
         
         empresas = empresas.filter(area__in=areas_post)
         
