@@ -167,3 +167,16 @@ def lista_propostas(request):
     }
 
     return render(request, template_name, context)
+
+
+@login_required
+def dashboard(request):
+    template_name = 'dashboard.html'
+    propostas = PropostaInvestimento.objects.filter(investidor=request.user)
+    context = {
+        'labels': [p.empresa.nome for p in propostas],
+        'percentuais_equity': [p.empresa.percentual_equity for p in propostas],
+        'percentuais_proposta': [int(p.percentual) for p in propostas],
+    }
+
+    return render(request, template_name, context)
