@@ -10,6 +10,7 @@
 
 - <a href='#pré-requesitos'>Pré-requisitos</a>
 - <a href='#funcionalidades'>Funcionalidades</a>
+- <a href='#screenshots'>screenshots</a>
 - <a href='#como-executar-o-projeto'>Como executar o projeto</a>
 
 ### Pré-requisitos
@@ -18,24 +19,25 @@
 
 ### Funcionalidades
 
-- Cadastro de usuários <br>
-  ![Cadastro de usuário](screenshots/cadastro_usuario.jpg)
-   <br>
-- Login do usuário <br>
-  ![Login usuário](screenshots/login_usuario.jpg)  
-  <br>
-- Cadastro empresas <br>
-  ![Cadastro empresa](screenshots/cadastro_empresa.jpg)
-   <br>
-- Lista empresas <br>
-  ![Lista empresas](screenshots/lista_empresas.jpg)
-  <br>
-- Ver empresa <br>
-  ![Lista empresas](screenshots/ver_empresa.jpg)
-  <br>
-- Sugestões de empresas para investidores <br>
-  ![Lista empresas](screenshots/sugestoes.jpg)
-  
+- Cadastro de usuários
+- Login do usuário
+- Cadastro empresas
+- Lista empresas
+- Ver empresa
+- Sugestões de empresas para investidores
+- Realizar proposta de investimento
+- Assinar contrato
+- Lista de propostas do investidor
+- Dashboard
+
+### Screenshots
+
+|<img src="screenshots/cadastro_usuario.jpg" width="250">| &nbsp;&nbsp;<img src="screenshots/login_usuario.jpg" width="250">|
+|<img src="screenshots/cadastro_empresa.jpg" width="250">| &nbsp;&nbsp;<img src="screenshots/lista_empresas.jpg" width="250">
+|<img src="screenshots/ver_empresa.jpg" width="250">| &nbsp;&nbsp;<img src="screenshots/sugestoes.jpg" width="250">|
+|<img src="screenshots/realizar_proposta.jpg" width="250">| &nbsp;&nbsp;<img src="screenshots/assinar_contrato.jpg" width="250">|
+|<img src="screenshots/lista_propostas.jpg" width="250">| &nbsp;&nbsp;<img src="screenshots/dashboard.jpg" width="250">|
+
 ### Como executar o projeto
 
 ```bash
