@@ -161,9 +161,13 @@ def assinar_contrato(request, id_pi):
 def lista_propostas(request):
     template_name = 'lista_propostas.html'
     propostas = PropostaInvestimento.objects.filter(investidor=request.user)
+    busca = request.GET.get('empresa')
+    if busca:
+        propostas = propostas.filter(empresa__nome__icontains=busca)
     context = {
         'propostas' : propostas,
-        'concretizado': True
+        'concretizado': True,
+        'busca': busca,
     }
 
     return render(request, template_name, context)

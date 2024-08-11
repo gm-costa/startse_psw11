@@ -13,7 +13,7 @@
 {% block 'body' %}
     <div class="container inter">
         {% include "partials/messages.html" %}
-        <form action="{% url 'lista_empresas' %}" method="GET">
+        <form action="{% url 'lista_propostas' %}" method="GET">
             <div class="d-flex align-items-end gap-4 mt-4">
                 <div class="">
                     <label>Empresa</label>
@@ -23,7 +23,7 @@
                     {% endif %} autofocus>
                 </div>
                 <input type="submit" class="btn-cadastro bsm-px20" value="Filtrar">
-                <a href="{% url 'lista_empresas' %}" class="btn-secundario bsm-px10" data-bs-tt="tooltip" data-bs-title="Remover filtro"><i class="bi bi-arrow-counterclockwise"></i></a>
+                <a href="{% url 'lista_propostas' %}" class="btn-secundario bsm-px10" data-bs-tt="tooltip" data-bs-title="Remover filtro"><i class="bi bi-arrow-counterclockwise"></i></a>
             </div>
         </form>
         <div class="bg-color-dark p-5">
