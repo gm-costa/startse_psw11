@@ -7,7 +7,7 @@ from brutils import is_valid_cnpj
 def check_nome_empresa(request):
     nome = request.GET.get('nome').strip()
     if nome:
-        if Empresa.objects.filter(nome=nome):
+        if Empresa.objects.filter(nome=nome.upper()):
             return HttpResponse('Nome já cadastrado !')
         else:
             return HttpResponse('')

@@ -48,7 +48,7 @@ def cadastrar_empresa(request):
         try:
             empresa = Empresa(
                 user = request.user,
-                nome = nome,
+                nome = nome.upper(),
                 cnpj = cnpj,
                 site = site,
                 inicio_atividade = inicio_atividade,
