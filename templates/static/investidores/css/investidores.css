@@ -3,3 +3,7 @@
     border: none;
     width: 18rem;
 }
+
+.b-radius {
+    border-radius: .5rem;
+}

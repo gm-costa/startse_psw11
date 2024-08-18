@@ -4,6 +4,6 @@ from .models import PropostaInvestimento
 
 class PropostaInvestimentoAdmin(admin.ModelAdmin):
     Model = PropostaInvestimento
-    list_display = ['valor', 'percentual', 'empresa', 'status']
+    list_display = ['data', 'valor', 'percentual', 'empresa', 'investidor', 'status']
 
 admin.site.register(PropostaInvestimento, PropostaInvestimentoAdmin)

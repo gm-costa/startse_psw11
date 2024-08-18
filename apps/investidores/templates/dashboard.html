@@ -8,32 +8,49 @@
     <link rel="stylesheet" href="{% static 'geral/css/header.css' %}">
     <link rel="stylesheet" href="{% static 'usuarios/css/usuarios.css' %}">
     <link rel="stylesheet" href="{% static 'empresarios/css/empresarios.css' %}">
+    <link rel="stylesheet" href="{% static 'investidores/css/investidores.css' %}">
 {% endblock 'head' %}
 
 {% block 'body' %}
     <div class="container inter">
         <div class="w-75 mt-5">
-            <canvas id="barChart"></canvas>
+            <div class="d-flex align-items-center gap-4 mb-4">
+                <h3 class="mb-0">Propostas aceitas no período de</h3>
+                <select class="form-select w-20" name="qtd-dias" id="qtd-dias">
+                    <option value="7" {% if qtd_dias == 7 %}selected{% endif %}>7 dias</option>
+                    <option value="15" {% if qtd_dias == 15 %}selected{% endif %}>15 dias</option>
+                    <option value="30" {% if qtd_dias == 30 %}selected{% endif %}>30 dias</option>
+                </select>
+            </div>
+            <div class="d-flex align-items-center gap-4 mb-4">
+                <label for="ultimo-dia" class="form-label">Último dia do período:</label>
+                <input type="date" class="form-control data" name="ultimo-dia" id="ultimo-dia" value="{{ultimo_dia|date:'Y-m-d'}}">
+                <a href="#" id="remover-filtro" class="d-flex btn btn-secundario bsm-px10 align-items-center" data-bs-tt="tooltip" data-bs-title="Remover filtro"><i class="bi bi-arrow-counterclockwise"></i></a>
+            </div>
+            
+            {% if not valores %}
+                <p class="bg-color-dark fs-3 fw-700 p-4 b-radius">Nenhuma proposta aceita no período !</p>
+            {% else %}
+                <canvas id="barChart"></canvas>
+            {% endif %}
+                
         </div>
+
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <script>
+            const el_ultimo_dia = document.getElementById('ultimo-dia');
+            const el_qtd_dias = document.getElementById('qtd-dias');
+            const el_remover_filtro = document.getElementById('remover-filtro');
             const ctx = document.getElementById('barChart');
             const data = {
                 labels: {{labels|safe}},
                 datasets: [
                     {
-                        label: 'Equity (%)',
+                        label: 'Investimento recebido',
                         backgroundColor: 'rgb(255, 99, 132, 0.2)',
                         borderColor: 'rgb(255, 99, 132)',
                         borderWidth: 1,
-                        data: {{percentuais_equity|safe}},
-                    },
-                    {
-                        label: 'Proposta (%)',
-                        backgroundColor: 'rgb(54, 162, 235, 0.2)',
-                        borderColor: 'rgb(54, 162, 235)',
-                        borderWidth: 1,
-                        data: {{percentuais_proposta|safe}},
+                        data: {{valores|safe}},
                     },
                 ]
             };
@@ -50,6 +67,23 @@
                     }
             });
             
+            el_ultimo_dia.addEventListener('change', () => {
+                const url_params = new URLSearchParams(window.location.search);
+                url_params.set('ultimo-dia', el_ultimo_dia.value);
+                window.location.search = url_params;
+            });
+            el_qtd_dias.addEventListener('change', () => {
+                const url_params = new URLSearchParams(window.location.search);
+                url_params.set('qtd-dias', el_qtd_dias.value);
+                window.location.search = url_params;
+            });
+            el_remover_filtro.addEventListener('click', () => {
+                const url_params = new URLSearchParams(window.location.search);
+                url_params.delete('qtd-dias', el_qtd_dias.value);
+                url_params.delete('ultimo-dia', el_ultimo_dia.value);
+                window.location.search = url_params;
+            });
+
         </script>
     </div>
 {% endblock 'body' %}

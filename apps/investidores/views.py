@@ -1,8 +1,11 @@
 from datetime import datetime, timedelta
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.db.models.aggregates import Sum
+from django.db.models.functions import TruncDay
 from django.http import Http404
 from django.shortcuts import redirect, render, get_object_or_404
+from django.utils import timezone
 from empresarios.models import Documento, Empresa, Metrica
 from .models import PropostaInvestimento
 from brutils import format_cnpj
@@ -111,6 +114,7 @@ def realizar_proposta(request, id_emp):
 
         try:
             pi = PropostaInvestimento(
+                data = datetime.today().date(),
                 valor = valor,
                 percentual = percentual,
                 empresa = empresa,
@@ -121,7 +125,6 @@ def realizar_proposta(request, id_emp):
             messages.add_message(request, messages.WARNING, f'Erro: {e}')
             return redirect(f'/investidores/acessar-empresa/{id_emp}')
 
-        #messages.add_message(request, messages.SUCCESS, f'Proposta enviada com sucesso')
         return redirect(f'/investidores/assinar-contrato/{pi.id}')
 
 
@@ -160,7 +163,7 @@ def assinar_contrato(request, id_pi):
 @login_required
 def lista_propostas(request):
     template_name = 'lista_propostas.html'
-    propostas = PropostaInvestimento.objects.filter(investidor=request.user)
+    propostas = PropostaInvestimento.objects.filter(empresa__user=request.user).exclude(status='AA')
     busca = request.GET.get('empresa')
     if busca:
         propostas = propostas.filter(empresa__nome__icontains=busca)
@@ -174,13 +177,58 @@ def lista_propostas(request):
 
 
 @login_required
-def dashboard(request):
+def dashboard(request, id_emp):
     template_name = 'dashboard.html'
-    propostas = PropostaInvestimento.objects.filter(investidor=request.user)
+    empresa = Empresa.objects.get(id=id_emp)
+    qtd_dias = request.GET.get('qtd-dias')
+    ultimo_dia = request.GET.get('ultimo-dia')
+
+    qtd_dias = 7 if not qtd_dias else int(qtd_dias)
+
+    if ultimo_dia:
+        ultimo_dia = datetime.strptime(ultimo_dia, '%Y-%m-%d')
+    else:
+        ultimo_dia = timezone.now().date()
+
+    sete_dias_atras = ultimo_dia - timedelta(days=qtd_dias - 1)
+
+    '''Forma simples
+
+    propostas_diarias = {}
+
+    for i in range(7):
+        dia = sete_dias_atras + timedelta(days=i)
+
+        propostas = PropostaInvestimento.objects.filter(
+            empresa=empresa,
+            status='PA',
+            data=dia
+        )
+
+        total_dia = 0
+        for proposta in propostas:
+            total_dia += proposta.valor
+        
+        propostas_diarias[dia.strftime('%d/%m/%Y')] = float(total_dia)
+    '''
+
+    # Forma mais otimizada e avançada
+    propostas_diarias = PropostaInvestimento.objects.filter(
+        empresa=empresa,
+        status='PA',
+        data__range=[sete_dias_atras, ultimo_dia]
+    ).values('data').annotate(total=Sum('valor')).order_by('data')
+
+    lista_datas = [datetime.strftime(p['data'], '%d/%m/%Y') for p in propostas_diarias]
+    lista_totais = [float(p['total']) for p in propostas_diarias]
+
     context = {
-        'labels': [p.empresa.nome for p in propostas],
-        'percentuais_equity': [p.empresa.percentual_equity for p in propostas],
-        'percentuais_proposta': [int(p.percentual) for p in propostas],
+        'qtd_dias': qtd_dias,
+        'ultimo_dia': ultimo_dia,
+        # 'labels': list(propostas_diarias.keys()),
+        # 'valores': list(propostas_diarias.values()),
+        'labels': lista_datas,
+        'valores': lista_totais,
     }
 
     return render(request, template_name, context)

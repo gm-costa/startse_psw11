@@ -10,6 +10,7 @@ class PropostaInvestimento(models.Model):
         ('PA', 'Proposta aceita'),
         ('PR', 'Proposta recusada')
     )
+    data = models.DateField()
     valor = models.DecimalField(max_digits=9, decimal_places=2)
     percentual = models.FloatField()
     empresa = models.ForeignKey(Empresa, on_delete=models.DO_NOTHING)
@@ -21,10 +22,6 @@ class PropostaInvestimento(models.Model):
     @property
     def valuation(self):
         return float((100*self.valor)) / self.percentual
-    
-    @property
-    def concretizada(self):
-        return True if self.percentual >= (self.empresa.percentual_equity * .8) else False
 
     def __str__(self):
-        return str(self.valor)
+        return f'{self.id} | {self.data} | {self.valor}'

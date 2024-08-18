@@ -10,13 +10,23 @@
                 <div class="mx-auto">
                     <ul class="navbar-nav align-items-center gap-5">
                         <li class="nav-item">
+                            <a class="nav-link" href="{% url 'cadastrar_empresa' %}">
+                                Quero captar
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link" href="{% url 'lista_empresas' %}">
+                                Minhas empresas
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'sugestoes' %}">
                                 Marketplace
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'cadastrar_empresa' %}">
-                                Quero captar
+                            <a class="nav-link" href="{% url 'lista_propostas' %}">
+                                Propostas
                             </a>
                         </li>
                     </ul>

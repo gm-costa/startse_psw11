@@ -27,7 +27,7 @@
 - Sugestões de empresas para investidores
 - Realizar proposta de investimento
 - Assinar contrato
-- Lista de propostas do investidor
+- Lista de propostas
 - Dashboard
 
 ### Screenshots

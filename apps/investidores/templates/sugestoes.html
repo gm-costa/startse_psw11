@@ -24,13 +24,13 @@
                     {% csrf_token %}
                     <div class="mb-4">
                         <h3 class="fw-700">Tipo de investidor</h3>
-                        <p>Selecione conservador caso busque investimentos de menos risco
-                            e com menor retorno, selecione despojado se prefere correr mais riscos
-                            e ter maiores possíbilidades de retorno.</p>
+                        <p>Selecione em qual tipo de investidor você se enquadra.</p>
                         <select name="tipo" class="form-select w-70" autofocus>
-                            <option value="C" {% if tipo == 'C' %}selected{% endif%}>Conservador</option>
-                            <option value="D" {% if tipo == 'D' %}selected{% endif%}>Despojado</option>
-                            <option value="M" {% if tipo == 'M' %}selected{% endif%}>Moderado</option>
+                            <option value="C" {% if tipo == 'C' %}selected{% endif%}>Conservador (investimentos de menos risco
+                                e com menor retorno)</option>
+                            <option value="D" {% if tipo == 'D' %}selected{% endif%}>Despojado (correr mais riscos
+                                e ter maiores possíbilidades de retorno)</option>
+                            <option value="M" {% if tipo == 'M' %}selected{% endif%}>Moderado (riscos e retornos intermediários)</option>
                         </select>
                     </div>
                     <div class="mb-4">

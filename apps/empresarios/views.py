@@ -1,10 +1,12 @@
 from django.shortcuts import redirect, render, get_object_or_404
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 from investidores.models import PropostaInvestimento
 from .models import Documento, Empresa, Metrica
 from brutils import is_valid_cnpj, format_cnpj
+import os
 
 
 @login_required
@@ -164,7 +166,10 @@ def excluir_doc(request, id):
         return redirect(reverse('lista_empresas'))
     
     try:
+        path_arquivo = os.path.join(settings.MEDIA_ROOT, str(documento.arquivo))
         documento.delete()
+        if os.path.exists(path_arquivo):
+            os.remove(path_arquivo)
         messages.add_message(request, messages.SUCCESS, 'Documento excluído com sucesso')
     except Exception as e:
         messages.add_message(request, messages.ERROR, f'Ocorreu erro: {e}')

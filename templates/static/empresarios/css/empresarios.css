@@ -78,3 +78,13 @@
 .text-justify {
     text-align: justify;
 }
+
+.bi {
+    height: 25px;
+}
+
+.not-active {
+    color: var(--secondary-color);
+    cursor: not-allowed;
+    pointer-events: none;
+}

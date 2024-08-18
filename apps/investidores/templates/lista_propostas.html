@@ -23,7 +23,7 @@
                     {% endif %} autofocus>
                 </div>
                 <input type="submit" class="btn-cadastro bsm-px20" value="Filtrar">
-                <a href="{% url 'lista_propostas' %}" class="btn-secundario bsm-px10" data-bs-tt="tooltip" data-bs-title="Remover filtro"><i class="bi bi-arrow-counterclockwise"></i></a>
+                <a href="{% url 'lista_propostas' %}" class="btn-secundario bsm-px10 d-flex align-items-center" data-bs-tt="tooltip" data-bs-title="Remover filtro"><i class="bi bi-arrow-counterclockwise"></i></a>
             </div>
         </form>
         <div class="bg-color-dark p-5">
@@ -49,14 +49,23 @@
                                     </div>
                                 </td>
                                 <td>
-                                    <span class="badge border">{{proposta.get_status_display}}</span>
+                                    <span class="w-70 badge 
+                                        {% if proposta.status == 'PA' %}
+                                            badge-green
+                                        {% elif proposta.status == 'PE' %}
+                                            badge-blue
+                                        {% elif proposta.status == 'PR' %}
+                                            bg-danger
+                                        {% endif %}">
+                                        {{proposta.get_status_display}}
+                                    </span>
                                 </td>
                                 <td class="text-center">
-                                    {% if proposta.concretizada %}
-                                        <i class="bi bi-check-lg bg-info">
-                                    {% else %}
-                                        <i class="bi bi-x-lg bg-warning"></i>
-                                    {% endif %}
+                                    <a href="{% url 'ver_empresa' proposta.empresa.id %}" class="btn-cadastro
+                                        {% if proposta.status in 'PAPR' %}
+                                            not-active
+                                        {% endif %}"
+                                    >Decidir</a>
                                 </td>
                             </tr>
                         {% endfor %}
